@@ -3,6 +3,8 @@ const app = express();
 var cors = require("cors");
 const bodyParser = require("body-parser");
 
+app.options("*", cors());
+
 app.use(
   cors({
     credentials: true,
