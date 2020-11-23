@@ -13,7 +13,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.send("welcome to the new twitter ");
+  res.send("welcome to new twitter ");
 });
 
 app.listen(process.env.PORT || 8080, function () {
