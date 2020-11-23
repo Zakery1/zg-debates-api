@@ -1,0 +1,7 @@
+{
+  "name": "zg-debates-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Zakery1/zg-debates-api.git",
+  "license": "MIT"
+}
