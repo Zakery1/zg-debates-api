@@ -31,6 +31,21 @@ const pool = new Pool({
   },
 });
 
+app.get("/api/getCategories", (request, response) => {
+
+  pool.query("SELECT * FROM categories", (error, results) => {
+    if (error) {
+      throw error;
+    }
+    const categories = results.rows.map((category) => {
+      return category;
+    });
+    response.status(200).json(categories);
+  });
+});
+
+
+
 app.get("/api/getUserById/:id", (request, response) => {
   const id = request.params.id;
 
