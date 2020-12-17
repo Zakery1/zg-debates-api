@@ -32,7 +32,6 @@ const pool = new Pool({
 });
 
 app.get("/api/getCategories", (request, response) => {
-
   pool.query("SELECT * FROM categories", (error, results) => {
     if (error) {
       throw error;
@@ -44,7 +43,21 @@ app.get("/api/getCategories", (request, response) => {
   });
 });
 
+app.get("/api/getDiscussions/:id", (request, response) => {
+  const { id } = request.params;
 
+  console.log("request", request);
+
+  pool.query(`SELECT * FROM categories where id = ${id}`, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    const discussions = results.rows.map((discussion) => {
+      return discussion;
+    });
+    response.status(200).json(discussions);
+  });
+});
 
 app.get("/api/getUserById/:id", (request, response) => {
   const id = request.params.id;
