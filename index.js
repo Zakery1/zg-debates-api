@@ -46,9 +46,7 @@ app.get("/api/getCategories", (request, response) => {
 app.get("/api/getDiscussions/:id", (request, response) => {
   const { id } = request.params;
 
-  console.log("request", request);
-
-  pool.query(`SELECT * FROM categories where id = ${id}`, (error, results) => {
+  pool.query(`SELECT * FROM discussions where id = ${id}`, (error, results) => {
     if (error) {
       throw error;
     }
