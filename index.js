@@ -32,6 +32,7 @@ const pool = new Pool({
 });
 
 app.get("/api/getCategories", (request, response) => {
+  response.setHeader("Access-Control-Allow-Origin", "*");
   pool.query("SELECT * FROM categories", (error, results) => {
     if (error) {
       throw error;
@@ -45,6 +46,7 @@ app.get("/api/getCategories", (request, response) => {
 });
 
 app.get("/api/getDiscussions/:id", (request, response) => {
+  response.setHeader("Access-Control-Allow-Origin", "*");
   const { id } = request.params;
   let discussionName;
 
@@ -74,8 +76,9 @@ app.get("/api/getDiscussions/:id", (request, response) => {
 //   });
 // });
 
-app.get("/", (req, res) => {
-  res.send("welcome to new twitter ");
+app.get("/", (request, response) => {
+  response.setHeader("Access-Control-Allow-Origin", "*");
+  response.send("welcome to new twitter ");
 });
 
 app.listen(process.env.PORT || 8080, function () {
