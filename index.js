@@ -37,6 +37,7 @@ app.get("/api/getCategories", (request, response) => {
       throw error;
     }
     const categories = results.rows.map((category) => {
+      console.log("category", category)
       return category;
     });
     response.status(200).json(categories);
@@ -59,19 +60,19 @@ app.get("/api/getDiscussions/:id", (request, response) => {
   });
 });
 
-app.get("/api/getUserById/:id", (request, response) => {
-  const id = request.params.id;
+// app.get("/api/getUserById/:id", (request, response) => {
+//   const id = request.params.id;
 
-  pool.query("SELECT * FROM users WHERE id = $1", [id], (error, results) => {
-    if (error) {
-      throw error;
-    }
-    const username = results.rows.map((user) => {
-      return user.username;
-    });
-    response.status(200).json(username[0]);
-  });
-});
+//   pool.query("SELECT * FROM users WHERE id = $1", [id], (error, results) => {
+//     if (error) {
+//       throw error;
+//     }
+//     const username = results.rows.map((user) => {
+//       return user.username;
+//     });
+//     response.status(200).json(username[0]);
+//   });
+// });
 
 app.get("/", (req, res) => {
   res.send("welcome to new twitter ");
