@@ -45,13 +45,15 @@ app.get("/api/getCategories", (request, response) => {
 
 app.get("/api/getDiscussions/:id", (request, response) => {
   const { id } = request.params;
+  let discussionName;
 
   pool.query(`SELECT * FROM discussions where id = ${id}`, (error, results) => {
     if (error) {
       throw error;
     }
     const discussions = results.rows.map((discussion) => {
-      return discussion;
+      discussionName = discussion.discussion_name;
+      return {id: discussion.id, discussion: discussionName};
     });
     response.status(200).json(discussions);
   });
