@@ -41,7 +41,7 @@ app.get("/api/getCategories", (request, response) => {
 });
 
 app.get("/api/getDiscussions/:id", (request, response) => {
-  // response.setHeader("Access-Control-Allow-Origin", "*");
+  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
   const { id } = request.params;
   let discussionName;
 
