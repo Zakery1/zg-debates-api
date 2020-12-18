@@ -12,6 +12,18 @@ app.options("*", cors());
 
 app.use(bodyParser.json());
 
+const pool = new Pool({
+  user: process.env.DB_USERNAME,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: 5432,
+  ssl: {
+    require: true,
+    rejectUnauthorized: false,
+  },
+});
+
 var whitelist = ['https://zg-debates.netlify.app', 'http://localhost:3000'] 
 var corsOptions = {
   origin: function (origin, callback) {
@@ -30,17 +42,7 @@ app.use(
   })
 );
 
-const pool = new Pool({
-  user: process.env.DB_USERNAME,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: 5432,
-  ssl: {
-    require: true,
-    rejectUnauthorized: false,
-  },
-});
+
 
 app.get("/api/getCategories", (request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "*");
