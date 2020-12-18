@@ -12,7 +12,7 @@ app.options("*", cors());
 
 app.use(bodyParser.json());
 
-var whitelist = ['https://zg-debates.netlify.app/', 'http://localhost:8080']
+var whitelist = ['https://zg-debates.netlify.app', 'http://localhost:3000'] 
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
