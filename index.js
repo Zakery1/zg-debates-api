@@ -24,16 +24,16 @@ const pool = new Pool({
   },
 });
 
-var whitelist = ['https://zg-debates.netlify.app', 'http://localhost:3000'] 
+var whitelist = ["https://zg-debates.netlify.app", "http://localhost:3000"];
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'))
+      callback(new Error("Not allowed by CORS"));
     }
-  }
-}
+  },
+};
 
 app.use(
   cors({
@@ -42,16 +42,14 @@ app.use(
   })
 );
 
-
-
 app.get("/api/getCategories", (request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "*");
+  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
   pool.query("SELECT * FROM categories", (error, results) => {
     if (error) {
       throw error;
     }
     const categories = results.rows.map((category) => {
-      console.log("category", category)
+      console.log("category", category);
       return category;
     });
     response.status(200).json(categories);
@@ -69,7 +67,7 @@ app.get("/api/getDiscussions/:id", (request, response) => {
     }
     const discussions = results.rows.map((discussion) => {
       discussionName = discussion.discussion_name;
-      return {id: discussion.id, discussion: discussionName};
+      return { id: discussion.id, discussion: discussionName };
     });
     response.status(200).json(discussions);
   });
