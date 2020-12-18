@@ -24,12 +24,7 @@ const pool = new Pool({
   },
 });
 
-app.use(
-  cors({
-    credentials: true,
-    origin: corsOptions,
-  })
-);
+app.use(cors());
 
 app.get("/api/getCategories", (request, response) => {
   // response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
