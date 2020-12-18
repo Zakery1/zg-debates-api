@@ -24,17 +24,6 @@ const pool = new Pool({
   },
 });
 
-var whitelist = ["https://zg-debates.netlify.app", "http://localhost:3000"];
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
-
 app.use(
   cors({
     credentials: true,
@@ -43,7 +32,7 @@ app.use(
 );
 
 app.get("/api/getCategories", (request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
+  // response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
   pool.query("SELECT * FROM categories", (error, results) => {
     if (error) {
       throw error;
@@ -57,7 +46,7 @@ app.get("/api/getCategories", (request, response) => {
 });
 
 app.get("/api/getDiscussions/:id", (request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "*");
+  // response.setHeader("Access-Control-Allow-Origin", "*");
   const { id } = request.params;
   let discussionName;
 
@@ -88,7 +77,7 @@ app.get("/api/getDiscussions/:id", (request, response) => {
 // });
 
 app.get("/", (request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "*");
+  // response.setHeader("Access-Control-Allow-Origin", "*");
   response.send("welcome to new twitter ");
 });
 
