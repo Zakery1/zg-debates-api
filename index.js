@@ -59,7 +59,7 @@ app.get("/api/getDiscussions/:id", (request, response) => {
 app.get("/api/getContributions/:id", (request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const { id } = request.params;
-  pool.query(`SELECT * FROM contributions where id = ${id}`, (error, results) => {
+  pool.query(`SELECT * FROM contributions where discussion_id = ${id}`, (error, results) => {
     if (error) {
       throw error;
     }
