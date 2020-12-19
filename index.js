@@ -27,13 +27,12 @@ const pool = new Pool({
 app.use(cors());
 
 app.get("/api/getCategories", (request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
+  response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   pool.query("SELECT * FROM categories", (error, results) => {
     if (error) {
       throw error;
     }
     const categories = results.rows.map((category) => {
-      console.log("category", category);
       return category;
     });
     response.status(200).json(categories);
@@ -41,7 +40,7 @@ app.get("/api/getCategories", (request, response) => {
 });
 
 app.get("/api/getDiscussions/:id", (request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
+  response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const { id } = request.params;
   let discussionName;
 
@@ -54,6 +53,21 @@ app.get("/api/getDiscussions/:id", (request, response) => {
       return { id: discussion.id, discussion: discussionName };
     });
     response.status(200).json(discussions);
+  });
+});
+
+app.get("/api/getContributions/:id", (request, response) => {
+  response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  const { id } = request.params;
+  pool.query(`SELECT * FROM contributions where id = ${id}`, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    const contributions = results.rows.map((contribution) => {
+      // discussionName = discussion.discussion_name;
+      return contribution;
+    });
+    response.status(200).json(contributions);
   });
 });
 
