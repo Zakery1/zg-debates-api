@@ -42,15 +42,13 @@ app.get("/api/getCategories", (request, response) => {
 app.get("/api/getDiscussions/:id", (request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const { id } = request.params;
-  let discussionName;
 
   pool.query(`SELECT * FROM discussions where id = ${id}`, (error, results) => {
     if (error) {
       throw error;
     }
     const discussions = results.rows.map((discussion) => {
-      discussionName = discussion.discussion_name;
-      return { id: discussion.id, discussion: discussionName };
+      return { id: discussion.id, discussion: discussion.discussion_name };
     });
     response.status(200).json(discussions);
   });
@@ -59,16 +57,27 @@ app.get("/api/getDiscussions/:id", (request, response) => {
 app.get("/api/getContributions/:id", (request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const { id } = request.params;
-  pool.query(`SELECT * FROM contributions where discussion_id = ${id}`, (error, results) => {
-    if (error) {
-      throw error;
+  pool.query(
+    `SELECT * FROM contributions where discussion_id = ${id}`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      const contributions = results.rows.map((contribution) => {
+        return {
+          id: contribution.id,
+          userId: contribution.user_id,
+          discussionId: contribution.discussion_id,
+          contribution: contribution.contribution,
+          agree: contribution.agree,
+          neutral: contribution.neutral,
+          disagree: contribution.disagree,
+          points: contribution.points,
+        };
+      });
+      response.status(200).json(contributions);
     }
-    const contributions = results.rows.map((contribution) => {
-      // discussionName = discussion.discussion_name;
-      return contribution;
-    });
-    response.status(200).json(contributions);
-  });
+  );
 });
 
 // app.get("/api/getUserById/:id", (request, response) => {
