@@ -39,6 +39,30 @@ app.get("/api/getCategories", (request, response) => {
   });
 });
 
+app.post("/api/postContribution/", (request, response) => {
+  let {
+    userId,
+    discussionId,
+    contribution,
+    agree,
+    neutral,
+    disagree,
+    points,
+  } = request.body;
+
+  pool.query(
+    "INSERT INTO contributions (user_id, discussion_id, contribution, agree, neutral, disagree, points) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    [userId, discussionId, contribution, agree, neutral, disagree, points],
+    (error, results) => {
+      if (error) {
+        throw error;
+      } else {
+        response.status(200).json({ message: "Contribution Added" });
+      }
+    }
+  );
+});
+
 app.get("/api/getDiscussions/:id", (request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const { id } = request.params;
@@ -58,7 +82,7 @@ app.get("/api/getContributions/:id", (request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const { id } = request.params;
   pool.query(
-    `SELECT * FROM contributions where discussion_id = ${id}`,
+    `SELECT * FROM contributions WHERE discussion_id = ${id};`,
     (error, results) => {
       if (error) {
         throw error;
