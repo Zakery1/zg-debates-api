@@ -75,30 +75,6 @@ app.post("/api/createDiscussion", (request, response) => {
   );
 });
 
-// app.post("/api/postContribution", (request, response) => {
-//   let {
-//     userId,
-//     discussionId,
-//     contribution,
-//     agree,
-//     neutral,
-//     disagree,
-//     points,
-//   } = request.body;
-
-//   pool.query(
-//     "INSERT INTO contributions (user_id, discussion_id, contribution, agree, neutral, disagree, points) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-//     [userId, discussionId, contribution, agree, neutral, disagree, points],
-//     (error, results) => {
-//       if (error) {
-//         throw error;
-//       } else {
-//         response.status(200).json({ message: "Contribution Added" });
-//       }
-//     }
-//   );
-// });
-
 app.get("/api/getContributions/:id", (request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   const { id } = request.params;
@@ -147,6 +123,17 @@ app.post("/api/postContribution", (request, response) => {
       }
     }
   );
+});
+
+app.delete("/api/deleteContribution/:id", (request, response) => {
+  const id = request.params.id;
+
+  pool.query("DELETE FROM contributions WHERE id = $1", [id], (error, results) => {
+        if (error) {
+      throw error;
+    }
+    response.status(200).json("Contribution Deleted");
+  })
 });
 
 // app.get("/api/getUserById/:id", (request, response) => {
