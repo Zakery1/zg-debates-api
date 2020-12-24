@@ -141,24 +141,21 @@ app.delete("/api/deleteContribution/:id", (request, response) => {
   );
 });
 
-app.put(
-  "/api/editContribution/:id",
-  (request, response) => {
-    const id = request.params.id;
+app.put("/api/editContribution/:id", (request, response) => {
+  const id = request.params.id;
 
-    const { editedContribution } = request.body;
+  const { updatedContribution } = request.body;
 
-    pool.query(
-      "UPDATE contributions SET contribution = $1 WHERE id = $2",
-      [editedContribution, id],
-      (error, results) => {
-        if (error) {
-        }
-        response.status(200).json("Contribution Edited");
+  pool.query(
+    "UPDATE contributions SET contribution = $1 WHERE id = $2",
+    [updatedContribution, id],
+    (error, results) => {
+      if (error) {
       }
-    );
-  }
-);
+      response.status(200).json("Contribution Edited");
+    }
+  );
+});
 
 // app.get("/api/getUserById/:id", (request, response) => {
 //   const id = request.params.id;
