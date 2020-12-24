@@ -2,12 +2,11 @@ const express = require("express");
 const app = express();
 var cors = require("cors");
 
-const { Pool, Client } = require("pg");
+const { Pool } = require("pg");
 
 require("dotenv").config();
 
 const bodyParser = require("body-parser");
-const { request, response } = require("express");
 
 app.options("*", cors());
 
@@ -28,7 +27,7 @@ const pool = new Pool({
 app.use(cors());
 
 app.get("/api/getCategories", (request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
   pool.query("SELECT * FROM categories", (error, results) => {
     if (error) {
       throw error;
@@ -41,7 +40,7 @@ app.get("/api/getCategories", (request, response) => {
 });
 
 app.get("/api/getDiscussions/:categoryId", (request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
   const { categoryId } = request.params;
 
   pool.query(
@@ -59,7 +58,7 @@ app.get("/api/getDiscussions/:categoryId", (request, response) => {
 });
 
 app.post("/api/createDiscussion", (request, response) => {
-  // response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  // response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
   console.log("request.body", request.body);
   let { creatorId, categoryId, discussionName } = request.body;
 
@@ -77,7 +76,7 @@ app.post("/api/createDiscussion", (request, response) => {
 });
 
 app.get("/api/getContributions/:id", (request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
   const { id } = request.params;
   pool.query(
     `SELECT * FROM contributions WHERE discussion_id = ${id};`,
