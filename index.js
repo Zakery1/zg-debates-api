@@ -7,6 +7,7 @@ const { Pool, Client } = require("pg");
 require("dotenv").config();
 
 const bodyParser = require("body-parser");
+const { request, response } = require("express");
 
 app.options("*", cors());
 
@@ -128,13 +129,36 @@ app.post("/api/postContribution", (request, response) => {
 app.delete("/api/deleteContribution/:id", (request, response) => {
   const id = request.params.id;
 
-  pool.query("DELETE FROM contributions WHERE id = $1", [id], (error, results) => {
-        if (error) {
-      throw error;
+  pool.query(
+    "DELETE FROM contributions WHERE id = $1",
+    [id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json("Contribution Deleted");
     }
-    response.status(200).json("Contribution Deleted");
-  })
+  );
 });
+
+app.put(
+  "/api/editContribution/:id",
+  (request, response) => {
+    const id = request.params.id;
+
+    const { editedContribution } = request.body;
+
+    pool.query(
+      "UPDATE contributions SET contribution = $1 WHERE id = $2",
+      [editedContribution, id],
+      (error, results) => {
+        if (error) {
+        }
+        response.status(200).json("Contribution Edited");
+      }
+    );
+  }
+);
 
 // app.get("/api/getUserById/:id", (request, response) => {
 //   const id = request.params.id;
