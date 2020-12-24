@@ -39,63 +39,65 @@ app.get("/api/getCategories", (request, response) => {
   });
 });
 
-app.get("/api/getDiscussions/:id", (request, response) => {
+app.get("/api/getDiscussions/:categoryId", (request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  const { id } = request.params;
+  const { categoryId } = request.params;
 
-  console.log()
-
-  pool.query(`SELECT * FROM discussions where category_id = ${id}`, (error, results) => {
-    if (error) {
-      throw error;
+  pool.query(
+    `SELECT * FROM discussions where category_id = ${categoryId}`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      const discussions = results.rows.map((discussion) => {
+        return { id: discussion.id, discussion: discussion.discussion_name };
+      });
+      response.status(200).json(discussions);
     }
-    const discussions = results.rows.map((discussion) => {
-      return { id: discussion.id, discussion: discussion.discussion_name };
-    });
-    response.status(200).json(discussions);
-  });
+  );
 });
 
 app.post("/api/createDiscussion", (request, response) => {
-    // response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-    let { creatorId, discussionId, discussionName } = request.body;
+  // response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  console.log("request.body", request.body);
+  let { creatorId, categoryId, discussionName } = request.body;
 
-    pool.query(
-      "INSERT INTO discussions (creator_id, category_id, discussion_name) VALUES ($1, $2, $3)",
-      [creatorId, discussionId, discussionName],
-      (error, results) => {
-        if (error) {
-          throw error;
-        } else {
-          response.status(200).json({ message: "Contribution Added" });
-        }
+  pool.query(
+    "INSERT INTO discussions (creator_id, category_id, discussion_name) VALUES ($1, $2, $3)",
+    [creatorId, categoryId, discussionName],
+    (error, results) => {
+      if (error) {
+        throw error;
+      } else {
+        response.status(200).json({ message: "Contribution Added" });
       }
-    );
-  });
+    }
+  );
+});
 
-  // app.post("/api/postContribution", (request, response) => {
-  //   let {
-  //     userId,
-  //     discussionId,
-  //     contribution,
-  //     agree,
-  //     neutral,
-  //     disagree,
-  //     points,
-  //   } = request.body;
-  
-  //   pool.query(
-  //     "INSERT INTO contributions (user_id, discussion_id, contribution, agree, neutral, disagree, points) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-  //     [userId, discussionId, contribution, agree, neutral, disagree, points],
-  //     (error, results) => {
-  //       if (error) {
-  //         throw error;
-  //       } else {
-  //         response.status(200).json({ message: "Contribution Added" });
-  //       }
-  //     }
-  //   );
-  // });
+// app.post("/api/postContribution", (request, response) => {
+//   let {
+//     userId,
+//     discussionId,
+//     contribution,
+//     agree,
+//     neutral,
+//     disagree,
+//     points,
+//   } = request.body;
+
+//   pool.query(
+//     "INSERT INTO contributions (user_id, discussion_id, contribution, agree, neutral, disagree, points) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+//     [userId, discussionId, contribution, agree, neutral, disagree, points],
+//     (error, results) => {
+//       if (error) {
+//         throw error;
+//       } else {
+//         response.status(200).json({ message: "Contribution Added" });
+//       }
+//     }
+//   );
+// });
 
 app.get("/api/getContributions/:id", (request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
