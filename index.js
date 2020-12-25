@@ -58,7 +58,7 @@ app.get("/api/getDiscussions/:categoryId", (request, response) => {
 });
 
 app.post("/api/createDiscussion", (request, response) => {
-  // response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
+  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
   console.log("request.body", request.body);
   let { creatorId, categoryId, discussionName } = request.body;
 
@@ -126,6 +126,7 @@ app.post("/api/postContribution", (request, response) => {
 });
 
 app.delete("/api/deleteContribution/:id", (request, response) => {
+  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
   const id = request.params.id;
 
   pool.query(
@@ -141,6 +142,7 @@ app.delete("/api/deleteContribution/:id", (request, response) => {
 });
 
 app.put("/api/editContribution/:id", (request, response) => {
+  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
   const id = request.params.id;
 
   const { updatedContribution } = request.body;
