@@ -66,7 +66,7 @@ app.get("/api/getDiscussions/:categoryId", (request, response) => {
   );
 });
 
-app.post("/api/createDiscussion", cors(), (request, response) => {
+app.post("/api/createDiscussion", (request, response) => {
   console.log("body and params", request.body, request.params);
   response.setHeader(
     "Access-Control-Allow-Origin",
@@ -117,7 +117,7 @@ app.get("/api/getContributions/:id", (request, response) => {
   );
 });
 
-app.post("/api/postContribution", cors(), (request, response) => {
+app.post("/api/postContribution", (request, response) => {
   console.log("body and params", request.body, request.params);
   let {
     userId,
@@ -161,7 +161,7 @@ app.delete("/api/deleteContribution/:id", (request, response) => {
   );
 });
 
-app.put("/api/editContribution/:id", cors(), (request, response) => {
+app.put("/api/editContribution/:id", (request, response) => {
   console.log("body and params", request.body, request.params);
   response.setHeader(
     "Access-Control-Allow-Origin",
