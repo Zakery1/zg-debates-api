@@ -63,12 +63,13 @@ app.get("/api/getDiscussions/:categoryId", (request, response) => {
 
 app.options("*", cors());
 app.post("/api/createDiscussion", (request, response) => {
-  console.log("body and params", request.body, request.params);
   response.setHeader(
     "Access-Control-Allow-Origin",
     "https://zg-debates.netlify.app"
   );
   let { creatorId, categoryId, discussionName } = request.body;
+
+  console.log("the stuff", creatorId, categoryId, discussionName);
 
   pool.query(
     "INSERT INTO discussions (creator_id, category_id, discussion_name) VALUES ($1, $2, $3)",
