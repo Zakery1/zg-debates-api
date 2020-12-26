@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-var cors = require("cors");
+// var cors = require("cors");
 
 const { Pool } = require("pg");
 
@@ -8,7 +8,7 @@ require("dotenv").config();
 
 const bodyParser = require("body-parser");
 
-app.use(bodyParser.json(), cors());
+app.use(bodyParser.json());
 
 const pool = new Pool({
   user: process.env.DB_USERNAME,
