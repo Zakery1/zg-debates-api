@@ -1,16 +1,12 @@
 const express = require("express");
 const app = express();
-var cors = require("cors");
+// var cors = require("cors");
 
 const { Pool } = require("pg");
 
 require("dotenv").config();
 
 const bodyParser = require("body-parser");
-
-app.options("*", cors());
-
-app.use(bodyParser.json());
 
 app.use(bodyParser.json());
 
