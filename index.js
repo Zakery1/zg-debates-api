@@ -23,7 +23,6 @@ const pool = new Pool({
 });
 
 app.options("*", cors());
-
 app.get("/api/getCategories", (request, response) => {
   response.setHeader(
     "Access-Control-Allow-Origin",
@@ -40,6 +39,7 @@ app.get("/api/getCategories", (request, response) => {
   });
 });
 
+app.options("*", cors());
 app.get("/api/getDiscussions/:categoryId", (request, response) => {
   response.setHeader(
     "Access-Control-Allow-Origin",
@@ -61,6 +61,7 @@ app.get("/api/getDiscussions/:categoryId", (request, response) => {
   );
 });
 
+app.options("*", cors());
 app.post("/api/createDiscussion", (request, response) => {
   console.log("body and params", request.body, request.params);
   response.setHeader(
@@ -82,6 +83,7 @@ app.post("/api/createDiscussion", (request, response) => {
   );
 });
 
+app.options("*", cors());
 app.get("/api/getContributions/:id", (request, response) => {
   response.setHeader(
     "Access-Control-Allow-Origin",
@@ -111,6 +113,7 @@ app.get("/api/getContributions/:id", (request, response) => {
   );
 });
 
+app.options("*", cors());
 app.post("/api/postContribution", (request, response) => {
   console.log("body and params", request.body, request.params);
   let {
@@ -136,6 +139,7 @@ app.post("/api/postContribution", (request, response) => {
   );
 });
 
+app.options("*", cors());
 app.delete("/api/deleteContribution/:id", (request, response) => {
   response.setHeader(
     "Access-Control-Allow-Origin",
@@ -155,6 +159,7 @@ app.delete("/api/deleteContribution/:id", (request, response) => {
   );
 });
 
+app.options("*", cors());
 app.put("/api/editContribution/:id", (request, response) => {
   console.log("body and params", request.body, request.params);
   response.setHeader(
