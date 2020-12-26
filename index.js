@@ -69,7 +69,6 @@ app.post("/api/createDiscussion", (request, response) => {
     "Access-Control-Allow-Origin",
     "https://zg-debates.netlify.app"
   );
-  console.log("request.body", request.body);
   let { creatorId, categoryId, discussionName } = request.body;
 
   pool.query(
