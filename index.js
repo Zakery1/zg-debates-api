@@ -10,7 +10,18 @@ const bodyParser = require("body-parser");
 
 app.options("*", cors());
 
-app.use(bodyParser.json());
+let corsInfo = (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://zg-debates.netlify.app"); // update to match the domain you will make the request from
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+};
+
+app.use(bodyParser.json(), corsInfo);
+
+app.use();
 
 const pool = new Pool({
   user: process.env.DB_USERNAME,
