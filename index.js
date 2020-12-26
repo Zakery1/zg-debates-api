@@ -12,7 +12,7 @@ app.options("*", cors());
 
 app.use(bodyParser.json());
 
-app.use();
+app.use(bodyParser.json());
 
 const pool = new Pool({
   user: process.env.DB_USERNAME,
@@ -30,7 +30,7 @@ const pool = new Pool({
 app.get("/api/getCategories", (request, response) => {
   response.setHeader(
     "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
+    "http://192.168.1.236:3000"
   );
   pool.query("SELECT * FROM categories", (error, results) => {
     if (error) {
@@ -46,7 +46,7 @@ app.get("/api/getCategories", (request, response) => {
 app.get("/api/getDiscussions/:categoryId", (request, response) => {
   response.setHeader(
     "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
+    "http://192.168.1.236:3000"
   );
   const { categoryId } = request.params;
 
@@ -68,7 +68,7 @@ app.post("/api/createDiscussion", (request, response) => {
   console.log("body and params", request.body, request.params);
   response.setHeader(
     "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
+    "http://192.168.1.236:3000"
   );
   let { creatorId, categoryId, discussionName } = request.body;
 
@@ -88,7 +88,7 @@ app.post("/api/createDiscussion", (request, response) => {
 app.get("/api/getContributions/:id", (request, response) => {
   response.setHeader(
     "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
+    "http://192.168.1.236:3000"
   );
   const { id } = request.params;
   pool.query(
@@ -142,7 +142,7 @@ app.post("/api/postContribution", (request, response) => {
 app.delete("/api/deleteContribution/:id", (request, response) => {
   response.setHeader(
     "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
+    "http://192.168.1.236:3000"
   );
   const id = request.params.id;
 
@@ -162,7 +162,7 @@ app.put("/api/editContribution/:id", (request, response) => {
   console.log("body and params", request.body, request.params);
   response.setHeader(
     "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
+    "http://192.168.1.236:3000"
   );
   const id = request.params.id;
 
