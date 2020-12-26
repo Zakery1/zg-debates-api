@@ -19,7 +19,7 @@ let corsInfo = (req, res, next) => {
   next();
 };
 
-app.use(bodyParser.json(), corsInfo);
+app.use(bodyParser.json(), corsInfo());
 
 app.use();
 
