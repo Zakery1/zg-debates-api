@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 var cors = require("cors");
 
+const router = express.Router();
+
 const { Pool } = require("pg");
 
 require("dotenv").config();
@@ -25,6 +27,7 @@ const pool = new Pool({
 });
 
 app.use(cors());
+router.options("/", cores());
 
 app.get("/api/getCategories", (request, response) => {
   response.setHeader(
@@ -63,7 +66,7 @@ app.get("/api/getDiscussions/:categoryId", (request, response) => {
   );
 });
 
-app.post("/api/createDiscussion", (request, response) => {
+app.post("/api/createDiscussion", cors(), (request, response) => {
   console.log("body and params", request.body, request.params);
   response.setHeader(
     "Access-Control-Allow-Origin",
@@ -114,7 +117,7 @@ app.get("/api/getContributions/:id", (request, response) => {
   );
 });
 
-app.post("/api/postContribution", (request, response) => {
+app.post("/api/postContribution", cors(), (request, response) => {
   console.log("body and params", request.body, request.params);
   let {
     userId,
@@ -158,7 +161,7 @@ app.delete("/api/deleteContribution/:id", (request, response) => {
   );
 });
 
-app.put("/api/editContribution/:id", (request, response) => {
+app.put("/api/editContribution/:id", cors(), (request, response) => {
   console.log("body and params", request.body, request.params);
   response.setHeader(
     "Access-Control-Allow-Origin",
