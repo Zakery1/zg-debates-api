@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-// var cors = require("cors");
+var cors = require("cors");
 
 const { Pool } = require("pg");
 
@@ -21,6 +21,8 @@ const pool = new Pool({
     rejectUnauthorized: false,
   },
 });
+
+app.options("*", cors());
 
 app.get("/api/getCategories", (request, response) => {
   response.setHeader(
