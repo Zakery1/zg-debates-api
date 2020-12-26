@@ -2,8 +2,6 @@ const express = require("express");
 const app = express();
 var cors = require("cors");
 
-const router = express.Router();
-
 const { Pool } = require("pg");
 
 require("dotenv").config();
@@ -27,7 +25,6 @@ const pool = new Pool({
 });
 
 app.use(cors());
-router.options("/", cores());
 
 app.get("/api/getCategories", (request, response) => {
   response.setHeader(
