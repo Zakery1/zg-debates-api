@@ -63,17 +63,13 @@ app.get("/api/getDiscussions/:categoryId", (request, response) => {
 
 app.options("*", cors());
 app.post("/api/createDiscussion", (request, response) => {
-  console.log("request.body", request.body);
   let { creatorId, categoryId, discussionName } = request.body.data;
 
-  console.log("the stuff", creatorId, categoryId, discussionName);
   response.setHeader(
     "Access-Control-Allow-Origin",
     "https://zg-debates.netlify.app"
   );
-  // let { creatorId, categoryId, discussionName } = request.body;
 
-  console.log("the stuff", creatorId, categoryId, discussionName);
 
   pool.query(
     "INSERT INTO discussions (creator_id, category_id, discussion_name) VALUES ($1, $2, $3)",
@@ -120,7 +116,6 @@ app.get("/api/getContributions/:id", (request, response) => {
 
 app.options("*", cors());
 app.post("/api/postContribution", (request, response) => {
-  console.log("body and params", request.body, request.params);
   let {
     userId,
     discussionId,
@@ -129,7 +124,7 @@ app.post("/api/postContribution", (request, response) => {
     neutral,
     disagree,
     points,
-  } = request.body;
+  } = request.body.data;
 
   pool.query(
     "INSERT INTO contributions (user_id, discussion_id, contribution, agree, neutral, disagree, points) VALUES ($1, $2, $3, $4, $5, $6, $7)",
@@ -166,14 +161,13 @@ app.delete("/api/deleteContribution/:id", (request, response) => {
 
 app.options("*", cors());
 app.put("/api/editContribution/:id", (request, response) => {
-  console.log("body and params", request.body, request.params);
   response.setHeader(
     "Access-Control-Allow-Origin",
     "https://zg-debates.netlify.app"
   );
   const id = request.params.id;
 
-  const { updatedContribution } = request.body;
+  const { updatedContribution } = request.body.data;
 
   pool.query(
     "UPDATE contributions SET contribution = $1 WHERE id = $2",
