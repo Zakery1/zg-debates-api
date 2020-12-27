@@ -70,7 +70,6 @@ app.post("/api/createDiscussion", (request, response) => {
     "https://zg-debates.netlify.app"
   );
 
-
   pool.query(
     "INSERT INTO discussions (creator_id, category_id, discussion_name) VALUES ($1, $2, $3)",
     [creatorId, categoryId, discussionName],
@@ -168,6 +167,8 @@ app.put("/api/editContribution/:id", (request, response) => {
   const id = request.params.id;
 
   const { updatedContribution } = request.body.data;
+
+  console.log("id and updated CB", id, updatedContribution);
 
   pool.query(
     "UPDATE contributions SET contribution = $1 WHERE id = $2",
