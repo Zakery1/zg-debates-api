@@ -166,7 +166,7 @@ app.put("/api/editContribution/:id", (request, response) => {
   );
   const id = request.params.id;
 
-  const { updatedContribution } = request.body.data;
+  const { updatedContribution } = request.body;
 
   console.log("id and updated CB", id, updatedContribution);
 
