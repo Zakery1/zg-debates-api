@@ -168,7 +168,7 @@ app.put("/api/editContribution/:id", (request, response) => {
 
   const { updatedContribution } = request.body;
 
-  console.log("id and updated CB", id, updatedContribution);
+  console.log("put request.body", request.body);
 
   pool.query(
     "UPDATE contributions SET contribution = $1 WHERE id = $2",
