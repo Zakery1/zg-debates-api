@@ -63,8 +63,8 @@ app.get("/api/getDiscussions/:categoryId", (request, response) => {
 
 app.options("*", cors());
 app.post("/api/createDiscussion", (request, response) => {
-  console.log("request.gody", request.body);
-  let { creatorId, categoryId, discussionName } = request.body;
+  console.log("request.body", request.body);
+  let { creatorId, categoryId, discussionName } = request.body.data;
 
   console.log("the stuff", creatorId, categoryId, discussionName);
   response.setHeader(
