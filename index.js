@@ -63,11 +63,14 @@ app.get("/api/getDiscussions/:categoryId", (request, response) => {
 
 app.options("*", cors());
 app.post("/api/createDiscussion", (request, response) => {
+  let { creatorId, categoryId, discussionName } = request.body;
+
+  console.log("the stuff", creatorId, categoryId, discussionName);
   response.setHeader(
     "Access-Control-Allow-Origin",
     "https://zg-debates.netlify.app"
   );
-  let { creatorId, categoryId, discussionName } = request.body;
+  // let { creatorId, categoryId, discussionName } = request.body;
 
   console.log("the stuff", creatorId, categoryId, discussionName);
 
