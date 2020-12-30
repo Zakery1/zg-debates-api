@@ -7,6 +7,7 @@ const { Pool } = require("pg");
 require("dotenv").config();
 
 const bodyParser = require("body-parser");
+const { request, response } = require("express");
 
 app.use(bodyParser.json());
 
@@ -114,8 +115,31 @@ app.get("/api/getContributions/:id", (request, response) => {
 });
 
 app.options("*", cors());
-app.post("/api/postContribution", (request, response) => {
+app.get("/api/getVotes", (request, response) => {
+  response.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://zg-debates.netlify.app"
+  );
 
+  let { userId } = request.body;
+
+  pool.query(`select * from votes where user_id = ${userId};`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      const votes = results.rows.map((vote) => {
+        return {userId: vote.user_id,
+          contributionId: vote.contribution_id
+        }
+      });
+      response.status(200).json(votes);
+    }
+  );
+});
+
+app.options("*", cors());
+app.post("/api/postContribution", (request, response) => {
   response.setHeader(
     "Access-Control-Allow-Origin",
     "https://zg-debates.netlify.app"
