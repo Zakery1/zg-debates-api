@@ -224,6 +224,30 @@ app.post("/api/addVoteToRecord", (request, response) => {
 
 //end of voting
 
+
+app.options("*", cors());
+app.post("/api/createDiscussion", (request, response) => {
+  let { creatorId, categoryId, discussionName } = request.body.data;
+
+  response.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://zg-debates.netlify.app"
+  );
+
+  pool.query(
+    "INSERT INTO discussions (creator_id, category_id, discussion_name) VALUES ($1, $2, $3)",
+    [creatorId, categoryId, discussionName],
+    (error, results) => {
+      if (error) {
+        throw error;
+      } else {
+        response.status(200).json({ message: "Contribution Added" });
+      }
+    }
+  );
+});
+
+//contributions
 app.options("*", cors());
 app.post("/api/postContribution", (request, response) => {
   response.setHeader(
@@ -244,28 +268,6 @@ app.post("/api/postContribution", (request, response) => {
   pool.query(
     "INSERT INTO contributions (user_id, discussion_id, contribution, agree, neutral, disagree, points) VALUES ($1, $2, $3, $4, $5, $6, $7)",
     [userId, discussionId, contribution, agree, neutral, disagree, points],
-    (error, results) => {
-      if (error) {
-        throw error;
-      } else {
-        response.status(200).json({ message: "Contribution Added" });
-      }
-    }
-  );
-});
-
-app.options("*", cors());
-app.post("/api/createDiscussion", (request, response) => {
-  let { creatorId, categoryId, discussionName } = request.body.data;
-
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
-
-  pool.query(
-    "INSERT INTO discussions (creator_id, category_id, discussion_name) VALUES ($1, $2, $3)",
-    [creatorId, categoryId, discussionName],
     (error, results) => {
       if (error) {
         throw error;
@@ -316,6 +318,20 @@ app.put("/api/editContribution/:id", (request, response) => {
     }
   );
 });
+
+app.get("/api/getSingleContribution/:id", (request, response) => {
+  const id = request.params.id;
+
+  pool.query("SELECT * FROM contributions WHERE id = $1", [id], (error, results) => {
+        if (error) {
+      throw error;
+    }
+    const contribution = results.rows.map((contribution) => {
+      return contribution.contribution;
+    })
+    response.status(200).json(contribution[0]);
+  })
+})
 
 // app.get("/api/getUserById/:id", (request, response) => {
 //   const id = request.params.id;
