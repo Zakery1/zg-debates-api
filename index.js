@@ -115,28 +115,114 @@ app.get("/api/getContributions/:id", (request, response) => {
 });
 
 app.options("*", cors());
-app.get("/api/getVotes", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
+app.get("/api/getVotes/:userId", (request, response) => {
+  response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
-  let { userId } = request.body;
+  let { userId } = request.params;
 
-  pool.query(`select * from votes where user_id = ${userId};`,
+  pool.query(
+    `select contribution_id from votes where user_id = ${userId};`,
     (error, results) => {
       if (error) {
         throw error;
       }
       const votes = results.rows.map((vote) => {
-        return {userId: vote.user_id,
-          contributionId: vote.contribution_id
-        }
+        return { userId: vote.user_id, contributionId: vote.contribution_id };
       });
       response.status(200).json(votes);
     }
   );
 });
+
+////voting
+
+app.options("*", cors());
+app.put("/api/subtractPointFromContribution", (request, response) => {
+  response.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://zg-debates.netlify.app"
+  );
+
+  let { contributionId } = request.body;
+
+  pool.query(
+    `UPDATE contributions SET points = points - 1 WHERE id = $1;`,
+    [contributionId],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json("Vote Removed");
+    }
+  );
+});
+
+app.options("*", cors());
+app.put("/api/addPointToContribution", (request, response) => {
+  response.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://zg-debates.netlify.app"
+  );
+
+  let { contributionId } = request.body;
+
+  pool.query(
+    `UPDATE contributions SET points = points + 1 WHERE id = $1;`,
+    [contributionId],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json("New vote counted");
+    }
+  );
+});
+
+app.options("*", cors());
+app.delete("/api/removeVoteFromRecord", (request, response) => {
+  response.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://zg-debates.netlify.app"
+  );
+
+  let { userId, contributionId } = request.body;
+
+  pool.query(
+    "DELETE from votes where user_id = $1 AND contribution_id = $2",
+    [userId, contributionId],
+    (error, results) => {
+      if (error) {
+        throw error;
+      } else {
+        response.status(200).json({ message: "Vote removed from user record" });
+      }
+    }
+  );
+});
+
+app.options("*", cors());
+app.post("/api/addVoteToRecord", (request, response) => {
+  response.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://zg-debates.netlify.app"
+  );
+
+  let { userId, contributionId } = request.body;
+
+  pool.query(
+    "INSERT into votes (user_id, contribution_id) values ($1, $2);",
+    [userId, contributionId],
+    (error, results) => {
+      if (error) {
+        throw error;
+      } else {
+        response.status(200).json({ message: "Vote added to user record" });
+      }
+    }
+  );
+});
+
+//end of voting
 
 app.options("*", cors());
 app.post("/api/postContribution", (request, response) => {
