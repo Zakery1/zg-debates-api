@@ -92,7 +92,7 @@ app.get("/api/getContributions/:id", (request, response) => {
   );
   const { id } = request.params;
   pool.query(
-    `SELECT * FROM contributions WHERE discussion_id = ${id};`,
+    `SELECT * FROM contributions WHERE discussion_id = ${id} order by points Desc;`,
     (error, results) => {
       if (error) {
         throw error;
