@@ -116,7 +116,7 @@ app.get("/api/getContributions/:id", (request, response) => {
 
 app.options("*", cors());
 app.get("/api/getVotes/:userId", (request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
 
   let { userId } = request.params;
 
