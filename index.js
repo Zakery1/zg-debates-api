@@ -222,6 +222,23 @@ app.post("/api/addVoteToRecord", (request, response) => {
   );
 });
 
+app.options("*", cors());
+app.delete("/api/removeVotesFromContribution/:id", (request, response) => {
+  response.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://zg-debates.netlify.app"
+  );
+  let contributionId = request.params.id;
+
+  pool.query("DELETE FROM votes where contribution_id = $1", [contributionId], (error, results) => {
+    if (error) {
+      throw error;
+    } else {
+      response.status(200).json({ message: "Votes Deleted" });
+    }
+  })
+});
+
 //end of voting
 
 
