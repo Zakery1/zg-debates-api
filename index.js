@@ -34,7 +34,13 @@ app.get("/api/getCategories", (request, response) => {
       throw error;
     }
     const categories = results.rows.map((category) => {
-      return category;
+      
+      let categoryItem = {
+        id: category.id,
+        categoryName: category.category
+      }
+      
+      return categoryItem;
     });
     response.status(200).json(categories);
   });
