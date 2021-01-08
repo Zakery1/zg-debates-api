@@ -34,12 +34,11 @@ app.get("/api/getCategories", (request, response) => {
       throw error;
     }
     const categories = results.rows.map((category) => {
-      
       let categoryItem = {
         id: category.id,
-        categoryName: category.category
-      }
-      
+        categoryName: category.category,
+      };
+
       return categoryItem;
     });
     response.status(200).json(categories);
@@ -91,6 +90,29 @@ app.post("/api/createDiscussion", (request, response) => {
 });
 
 app.options("*", cors());
+app.get("/api/getDiscussionTitle/:id", (request, response) => {
+  response.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://zg-debates.netlify.app"
+  );
+  const { id } = request.params;
+
+  pool.query(
+    `SELECT discussion_name from discussions where id = ${id};`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      const discussionTitle = results.rows.map((item) => {
+        return item;
+      })
+      let discussionName = discussionTitle[0].discussion_name;
+      response.status(200).json(discussionName);
+    }
+  );
+});
+
+app.options("*", cors());
 app.get("/api/getContributions/:id", (request, response) => {
   response.setHeader(
     "Access-Control-Allow-Origin",
@@ -122,7 +144,10 @@ app.get("/api/getContributions/:id", (request, response) => {
 
 app.options("*", cors());
 app.get("/api/getVotes/:userId", (request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "https://zg-debates.netlify.app");
+  response.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://zg-debates.netlify.app"
+  );
 
   let { userId } = request.params;
 
@@ -236,17 +261,20 @@ app.delete("/api/removeVotesFromContribution/:id", (request, response) => {
   );
   let contributionId = request.params.id;
 
-  pool.query("DELETE FROM votes where contribution_id = $1", [contributionId], (error, results) => {
-    if (error) {
-      throw error;
-    } else {
-      response.status(200).json({ message: "Votes Deleted" });
+  pool.query(
+    "DELETE FROM votes where contribution_id = $1",
+    [contributionId],
+    (error, results) => {
+      if (error) {
+        throw error;
+      } else {
+        response.status(200).json({ message: "Votes Deleted" });
+      }
     }
-  })
+  );
 });
 
 //end of voting
-
 
 app.options("*", cors());
 app.post("/api/createDiscussion", (request, response) => {
@@ -345,16 +373,20 @@ app.put("/api/editContribution/:id", (request, response) => {
 app.get("/api/getSingleContribution/:id", (request, response) => {
   const id = request.params.id;
 
-  pool.query("SELECT * FROM contributions WHERE id = $1", [id], (error, results) => {
-        if (error) {
-      throw error;
+  pool.query(
+    "SELECT * FROM contributions WHERE id = $1",
+    [id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      const contribution = results.rows.map((contribution) => {
+        return contribution.contribution;
+      });
+      response.status(200).json(contribution[0]);
     }
-    const contribution = results.rows.map((contribution) => {
-      return contribution.contribution;
-    })
-    response.status(200).json(contribution[0]);
-  })
-})
+  );
+});
 
 // app.get("/api/getUserById/:id", (request, response) => {
 //   const id = request.params.id;
