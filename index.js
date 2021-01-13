@@ -1,4 +1,8 @@
+const numOfSaltRounds = 12;
+const bcrypt = require("bcrypt");
+
 const express = require("express");
+const session = require("express-session");
 const app = express();
 var cors = require("cors");
 
@@ -7,9 +11,19 @@ const { Pool } = require("pg");
 require("dotenv").config();
 
 const bodyParser = require("body-parser");
-const { request, response } = require("express");
+// const { request, response } = require("express");
 
 app.use(bodyParser.json());
+
+app.use(
+  session({
+    // store: new RedisStore({ url: process.env.REDIS_URL }),
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
+    resave: false,
+    cookie: { maxage: 1000 * 60 * 24 },
+  })
+);
 
 const pool = new Pool({
   user: process.env.DB_USERNAME,
@@ -105,7 +119,7 @@ app.get("/api/getDiscussionTitle/:id", (request, response) => {
       }
       const discussionTitle = results.rows.map((item) => {
         return item;
-      })
+      });
       let discussionName = discussionTitle[0].discussion_name;
       response.status(200).json(discussionName);
     }
@@ -384,6 +398,73 @@ app.get("/api/getSingleContribution/:id", (request, response) => {
         return contribution.contribution;
       });
       response.status(200).json(contribution[0]);
+    }
+  );
+});
+
+app.get("/api/checkIfUsernameExists/:username", (request, response) => {
+  const username = request.params.username;
+  pool.query(
+    `SELECT * FROM users where username = $1`,
+    [username],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+
+      const usernames = results.rows.map((user) => {
+        return user.username;
+      });
+      response.status(200).json(usernames);
+
+      // response.status(200).json({ message: "Username already exists" });
+    }
+  );
+});
+
+app.post("/api/registerUser", (request, response) => {
+  const { username, password } = request.body.data;
+
+  bcrypt.hash(password, numOfSaltRounds).then((hashedPassword) => {
+    pool.query(
+      "INSERT into users (username, password) VALUES ($1, $2);",
+      [username, hashedPassword],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        response.status(200).json({ message: "User Created" });
+      }
+    );
+  });
+});
+
+app.post("/api/login", (req, res) => {
+  debugger;
+  let { username, password } = req.body;
+
+  pool.query(
+    "select * from users where username = $1",
+    [username],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      results.rows.map((user) => {
+        if (user.length) {
+          bcrypt.compare(password, user.password).then((passwordsMatch) => {
+            if (passwordsMatch) {
+              req.session.user = {
+                username: users.username,
+                userId: users.id,
+              };
+              res.json(req.session.user);
+            } else {
+              res.status(403).json({ message: "Wrong password" });
+            }
+          });
+        }
+      });
     }
   );
 });
