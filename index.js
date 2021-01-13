@@ -422,8 +422,13 @@ app.get("/api/checkIfUsernameExists/:username", (request, response) => {
   );
 });
 
+app.options("*", cors());
 app.post("/api/registerUser", (request, response) => {
-  const { username, password } = request.body.data;
+  response.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://zg-debates.netlify.app"
+  );
+  const { username, password } = request.body;
 
   bcrypt.hash(password, numOfSaltRounds).then((hashedPassword) => {
     pool.query(
@@ -439,10 +444,13 @@ app.post("/api/registerUser", (request, response) => {
   });
 });
 
-app.post("/api/login", (req, res) => {
-  debugger;
-  let { username, password } = req.body;
-
+app.options("*", cors());
+app.post("/api/loginUser", (request, response) => {
+  response.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://zg-debates.netlify.app"
+  );
+  const { username, password } = request.body;
   pool.query(
     "select * from users where username = $1",
     [username],
@@ -451,22 +459,30 @@ app.post("/api/login", (req, res) => {
         throw error;
       }
       results.rows.map((user) => {
-        if (user.length) {
-          bcrypt.compare(password, user.password).then((passwordsMatch) => {
-            if (passwordsMatch) {
-              req.session.user = {
-                username: users.username,
-                userId: users.id,
+        if (user) {
+          bcrypt.compare(password, user.password, function (err, res) {
+            if (err) {
+              throw err;
+            }
+            if (res) {
+              request.session.user = {
+                username: user.username,
+                userId: user.id,
               };
-              res.json(req.session.user);
+              response.json(request.session.user);
             } else {
-              res.status(403).json({ message: "Wrong password" });
+              response.status(403).json({ message: "Wrong password" });
             }
           });
         }
       });
     }
   );
+});
+
+app.post("/api/logout", (request, response) => {
+  request.session.destroy();
+  response.status(200).send("logged out");
 });
 
 // app.get("/api/getUserById/:id", (request, response) => {
