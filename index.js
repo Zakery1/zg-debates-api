@@ -13,7 +13,6 @@ const { Pool } = require("pg");
 require("dotenv").config();
 
 const bodyParser = require("body-parser");
-// const { request, response } = require("express");
 
 app.use(bodyParser.json());
 
@@ -464,6 +463,10 @@ app.post("/api/loginUser", (request, response) => {
       results.rows.map((user) => {
         if (user) {
           bcrypt.compare(password, user.password, function (err, res) {
+            response.setHeader(
+              "Access-Control-Allow-Origin",
+              "https://zg-debates.netlify.app"
+            );
             if (err) {
               throw err;
             }
