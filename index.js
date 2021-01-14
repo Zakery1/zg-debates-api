@@ -15,11 +15,10 @@ const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
 
-app.use(session({ 
-  secret: 'Your_Secret_Key', 
-  resave: true, 
-  saveUninitialized: true
-})) 
+app.use(express.cookieParser('Your_Secret_Key'));
+
+
+app.use(session()) 
 
 // app.use(
 //   session({
