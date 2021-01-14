@@ -15,21 +15,11 @@ const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
 
-// app.use(express.cookieSession({
-//   // key: "mysite.sid.uid.whatever",
-//   secret: process.env["1122334"],
-//   cookie: {
-//     maxAge: 2678400000 // 31 days
-//   },
-// }));
-
-app.set('trust proxy', 1) // trust first proxy
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}))
+app.use(session({ 
+  secret: 'Your_Secret_Key', 
+  resave: true, 
+  saveUninitialized: true
+})) 
 
 // app.use(
 //   session({
