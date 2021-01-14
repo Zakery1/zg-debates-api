@@ -16,11 +16,11 @@ const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
 
-app.use(cookieParser("Your_Secret_Key"));
+app.use(cookieParser());
 
 app.use(
   session({
-    secret: cookieParser("Your_Secret_Key"),
+    secret: 'keyboard cat',
     saveUninitialized: false,
     resave: false,
     cookie: { maxage: 1000 * 60 * 24 },
