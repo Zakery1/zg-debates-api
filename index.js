@@ -1,6 +1,8 @@
 const numOfSaltRounds = 12;
 const bcrypt = require("bcrypt");
 
+const cookieParser = require("cookie-parser");
+
 const express = require("express");
 const session = require("express-session");
 const app = express();
@@ -15,20 +17,16 @@ const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
 
-app.use(express.cookieParser('Your_Secret_Key'));
+app.use(cookieParser("Your_Secret_Key"));
 
-
-app.use(session()) 
-
-// app.use(
-//   session({
-//     // store: new RedisStore({ url: process.env.REDIS_URL }),
-//     secret: "12121212",
-//     saveUninitialized: false,
-//     resave: false,
-//     cookie: { maxage: 1000 * 60 * 24 },
-//   })
-// );
+app.use(
+  session({
+    secret: cookieParser("Your_Secret_Key"),
+    saveUninitialized: false,
+    resave: false,
+    cookie: { maxage: 1000 * 60 * 24 },
+  })
+);
 
 const pool = new Pool({
   user: process.env.DB_USERNAME,
