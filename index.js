@@ -15,10 +15,18 @@ const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
 
+// app.use(express.cookieSession({
+//   // key: "mysite.sid.uid.whatever",
+//   secret: process.env["1122334"],
+//   cookie: {
+//     maxAge: 2678400000 // 31 days
+//   },
+// }));
+
 app.use(
   session({
     // store: new RedisStore({ url: process.env.REDIS_URL }),
-    secret: 1212,
+    secret: "12121212",
     saveUninitialized: false,
     resave: false,
     cookie: { maxage: 1000 * 60 * 24 },
