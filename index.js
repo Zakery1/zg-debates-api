@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(
   session({
     // store: new RedisStore({ url: process.env.REDIS_URL }),
-    secret: process.env.SESSION_SECRET,
+    secret: 1212,
     saveUninitialized: false,
     resave: false,
     cookie: { maxage: 1000 * 60 * 24 },
