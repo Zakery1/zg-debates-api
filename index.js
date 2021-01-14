@@ -23,15 +23,23 @@ app.use(bodyParser.json());
 //   },
 // }));
 
-app.use(
-  session({
-    // store: new RedisStore({ url: process.env.REDIS_URL }),
-    secret: "12121212",
-    saveUninitialized: false,
-    resave: false,
-    cookie: { maxage: 1000 * 60 * 24 },
-  })
-);
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
+
+// app.use(
+//   session({
+//     // store: new RedisStore({ url: process.env.REDIS_URL }),
+//     secret: "12121212",
+//     saveUninitialized: false,
+//     resave: false,
+//     cookie: { maxage: 1000 * 60 * 24 },
+//   })
+// );
 
 const pool = new Pool({
   user: process.env.DB_USERNAME,
