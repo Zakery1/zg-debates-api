@@ -8,6 +8,8 @@ const session = require("express-session");
 const app = express();
 var cors = require("cors");
 
+// app.use(cors())
+
 const { Pool } = require("pg");
 
 require("dotenv").config();
@@ -20,12 +22,14 @@ app.use(cookieParser());
 
 app.use(
   session({
-    secret: 'keyboard cat',
+    secret: "keyboard cat",
     saveUninitialized: false,
     resave: false,
     cookie: { maxage: 1000 * 60 * 24 },
   })
 );
+
+app.use(cors());
 
 const pool = new Pool({
   user: process.env.DB_USERNAME,
@@ -39,12 +43,7 @@ const pool = new Pool({
   },
 });
 
-app.options("*", cors());
 app.get("/api/getCategories", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
   pool.query("SELECT * FROM categories", (error, results) => {
     if (error) {
       throw error;
@@ -61,12 +60,7 @@ app.get("/api/getCategories", (request, response) => {
   });
 });
 
-app.options("*", cors());
 app.get("/api/getDiscussions/:categoryId", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
   const { categoryId } = request.params;
 
   pool.query(
@@ -83,14 +77,8 @@ app.get("/api/getDiscussions/:categoryId", (request, response) => {
   );
 });
 
-app.options("*", cors());
 app.post("/api/createDiscussion", (request, response) => {
   let { creatorId, categoryId, discussionName } = request.body.data;
-
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
 
   pool.query(
     "INSERT INTO discussions (creator_id, category_id, discussion_name) VALUES ($1, $2, $3)",
@@ -105,12 +93,7 @@ app.post("/api/createDiscussion", (request, response) => {
   );
 });
 
-app.options("*", cors());
 app.get("/api/getDiscussionTitle/:id", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
   const { id } = request.params;
 
   pool.query(
@@ -128,12 +111,7 @@ app.get("/api/getDiscussionTitle/:id", (request, response) => {
   );
 });
 
-app.options("*", cors());
 app.get("/api/getContributions/:id", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
   const { id } = request.params;
   pool.query(
     `SELECT * FROM contributions WHERE discussion_id = ${id} order by points Desc;`,
@@ -158,13 +136,7 @@ app.get("/api/getContributions/:id", (request, response) => {
   );
 });
 
-app.options("*", cors());
 app.get("/api/getVotes/:userId", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
-
   let { userId } = request.params;
 
   pool.query(
@@ -183,13 +155,7 @@ app.get("/api/getVotes/:userId", (request, response) => {
 
 ////voting
 
-app.options("*", cors());
 app.put("/api/subtractPointFromContribution", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
-
   let { contributionId } = request.body;
 
   pool.query(
@@ -204,13 +170,7 @@ app.put("/api/subtractPointFromContribution", (request, response) => {
   );
 });
 
-app.options("*", cors());
 app.put("/api/addPointToContribution", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
-
   let { contributionId } = request.body;
 
   pool.query(
@@ -225,13 +185,7 @@ app.put("/api/addPointToContribution", (request, response) => {
   );
 });
 
-app.options("*", cors());
 app.delete("/api/removeVoteFromRecord", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
-
   let { userId, contributionId } = request.body;
 
   pool.query(
@@ -247,13 +201,7 @@ app.delete("/api/removeVoteFromRecord", (request, response) => {
   );
 });
 
-app.options("*", cors());
 app.post("/api/addVoteToRecord", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
-
   let { userId, contributionId } = request.body;
 
   pool.query(
@@ -269,12 +217,7 @@ app.post("/api/addVoteToRecord", (request, response) => {
   );
 });
 
-app.options("*", cors());
 app.delete("/api/removeVotesFromContribution/:id", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
   let contributionId = request.params.id;
 
   pool.query(
@@ -292,14 +235,8 @@ app.delete("/api/removeVotesFromContribution/:id", (request, response) => {
 
 //end of voting
 
-app.options("*", cors());
 app.post("/api/createDiscussion", (request, response) => {
   let { creatorId, categoryId, discussionName } = request.body.data;
-
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
 
   pool.query(
     "INSERT INTO discussions (creator_id, category_id, discussion_name) VALUES ($1, $2, $3)",
@@ -315,13 +252,7 @@ app.post("/api/createDiscussion", (request, response) => {
 });
 
 //contributions
-app.options("*", cors());
 app.post("/api/postContribution", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
-
   let {
     userId,
     discussionId,
@@ -345,12 +276,7 @@ app.post("/api/postContribution", (request, response) => {
   );
 });
 
-app.options("*", cors());
 app.delete("/api/deleteContribution/:id", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
   const id = request.params.id;
 
   pool.query(
@@ -365,12 +291,7 @@ app.delete("/api/deleteContribution/:id", (request, response) => {
   );
 });
 
-app.options("*", cors());
 app.put("/api/editContribution/:id", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
   const id = request.params.id;
 
   const { updatedContribution } = request.body;
@@ -424,12 +345,7 @@ app.get("/api/checkIfUsernameExists/:username", (request, response) => {
   );
 });
 
-app.options("*", cors());
 app.post("/api/registerUser", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
   const { username, password } = request.body;
 
   bcrypt.hash(password, numOfSaltRounds).then((hashedPassword) => {
@@ -446,12 +362,7 @@ app.post("/api/registerUser", (request, response) => {
   });
 });
 
-app.options("*", cors());
 app.post("/api/loginUser", (request, response) => {
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://zg-debates.netlify.app"
-  );
   const { username, password } = request.body;
   pool.query(
     "select * from users where username = $1",
