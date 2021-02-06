@@ -2,7 +2,7 @@
 const router = require('express').Router();
 const { pool } = require('../helpers/pool.helper');
 
-router.get("/getDiscussions/:categoryId", (request, response) => {
+router.get("/discussions/:categoryId", (request, response) => {
   const { categoryId } = request.params;
 
   pool.query(
@@ -19,7 +19,7 @@ router.get("/getDiscussions/:categoryId", (request, response) => {
   );
 });
 
-router.post("/createDiscussion", (request, response) => {
+router.post("/discussions", (request, response) => {
   let { creatorId, categoryId, discussionName } = request.body.data;
 
   pool.query(
@@ -35,7 +35,7 @@ router.post("/createDiscussion", (request, response) => {
   );
 });
 
-router.get("/getDiscussionTitle/:id", (request, response) => {
+router.get("/discussions/names/:id", (request, response) => {
   const { id } = request.params;
 
   pool.query(
@@ -54,7 +54,7 @@ router.get("/getDiscussionTitle/:id", (request, response) => {
 });
 
 
-router.post("/createDiscussion", (request, response) => {
+router.post("/discussions", (request, response) => {
   let { creatorId, categoryId, discussionName } = request.body.data;
 
   pool.query(

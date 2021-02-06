@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { pool } = require('../helpers/pool.helper');
 
-router.delete("/removeVoteFromRecord", (request, response) => {
+router.delete("/votes", (request, response) => {
   let { userId, contributionId } = request.body;
 
   pool.query(
@@ -17,7 +17,7 @@ router.delete("/removeVoteFromRecord", (request, response) => {
   );
 });
 
-router.post("/addVoteToRecord", (request, response) => {
+router.post("/votes", (request, response) => {
   let { userId, contributionId } = request.body;
 
   pool.query(
@@ -33,7 +33,7 @@ router.post("/addVoteToRecord", (request, response) => {
   );
 });
 
-router.delete("/removeVotesFromContribution/:id", (request, response) => {
+router.delete("/votes/:id", (request, response) => {
   let contributionId = request.params.id;
 
   pool.query(

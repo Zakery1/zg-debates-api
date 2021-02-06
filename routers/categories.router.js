@@ -2,7 +2,7 @@
 const router = require('express').Router();
 const { pool } = require('../helpers/pool.helper');
 
-router.get("/getCategories", (request, response) => {
+router.get("/categories", (request, response) => {
   pool.query("SELECT * FROM categories", (error, results) => {
     if (error) {
       throw error;
