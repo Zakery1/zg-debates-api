@@ -32,6 +32,6 @@ app.get("/", (request, response) => {
   response.send("welcome to new twitter ");
 });
 
-app.listen(process.env.PORT || port, function () {
+app.listen(port, function () {
   console.log("server running on port " + port);
 });
