@@ -5,7 +5,7 @@ const { pool } = require('../helpers/pool.helper');
 
 const numOfSaltRounds = 12;
 
-router.get("/checkIfUsernameExists/:username", (request, response) => {
+router.get("/users/:username", (request, response) => {
   const username = request.params.username;
   pool.query(
     `SELECT * FROM users where username = $1`,
@@ -25,7 +25,7 @@ router.get("/checkIfUsernameExists/:username", (request, response) => {
   );
 });
 
-router.post("/registerUser", (request, response) => {
+router.post("/users", (request, response) => {
   const { username, password } = request.body;
 
   bcrypt.hash(password, numOfSaltRounds).then((hashedPassword) => {
@@ -42,7 +42,7 @@ router.post("/registerUser", (request, response) => {
   });
 });
 
-router.post("/loginUser", (request, response) => {
+router.post("/sessions", (request, response) => {
   const { username, password } = request.body;
   pool.query(
     "select * from users where username = $1",

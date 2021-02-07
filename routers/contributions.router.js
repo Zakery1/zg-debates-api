@@ -2,7 +2,7 @@
 const router = require('express').Router();
 const { pool } = require('../helpers/pool.helper');
 
-router.get("/getContributions/:id", (request, response) => {
+router.get("/contributions/:id", (request, response) => {
     const { id } = request.params;
     pool.query(
       `SELECT * FROM contributions WHERE discussion_id = ${id} order by points Desc;`,
@@ -27,7 +27,7 @@ router.get("/getContributions/:id", (request, response) => {
     );
 });
   
-router.get("/getVotes/:userId", (request, response) => {
+router.get("/contributions/:userId", (request, response) => {
     let { userId } = request.params;
   
     pool.query(
@@ -46,7 +46,7 @@ router.get("/getVotes/:userId", (request, response) => {
   
   ////voting
   
-router.put("/subtractPointFromContribution", (request, response) => {
+router.put("/contributions", (request, response) => {
     let { contributionId } = request.body;
   
     pool.query(
@@ -61,7 +61,7 @@ router.put("/subtractPointFromContribution", (request, response) => {
     );
 });
   
-router.put("/addPointToContribution", (request, response) => {
+router.put("/contributions", (request, response) => {
     let { contributionId } = request.body;
   
     pool.query(
@@ -76,7 +76,7 @@ router.put("/addPointToContribution", (request, response) => {
     );
 });
 
-router.post("/postContribution", (request, response) => {
+router.post("/contributions", (request, response) => {
   let {
     userId,
     discussionId,
@@ -100,7 +100,7 @@ router.post("/postContribution", (request, response) => {
   );
 });
 
-router.delete("/deleteContribution/:id", (request, response) => {
+router.delete("/contributions/:id", (request, response) => {
   const id = request.params.id;
 
   pool.query(
@@ -115,7 +115,7 @@ router.delete("/deleteContribution/:id", (request, response) => {
   );
 });
 
-router.put("/editContribution/:id", (request, response) => {
+router.put("/contributions/:id", (request, response) => {
   const id = request.params.id;
 
   const { updatedContribution } = request.body;
@@ -131,7 +131,7 @@ router.put("/editContribution/:id", (request, response) => {
   );
 });
 
-router.get("/getSingleContribution/:id", (request, response) => {
+router.get("/contributions/:id", (request, response) => {
   const id = request.params.id;
 
   pool.query(

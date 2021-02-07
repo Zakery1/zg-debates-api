@@ -18,7 +18,7 @@ app.use(cors());
 
 app.use(
   session({
-    secret: "keyboard cat", //<---- put this in config, its in a public repo rn
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
     resave: false,
     cookie: { maxage: 1000 * 60 * 24 },
