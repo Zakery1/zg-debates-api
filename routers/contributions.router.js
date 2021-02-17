@@ -2,10 +2,10 @@
 const router = require('express').Router();
 const { pool } = require('../helpers/pool.helper');
 
-router.get("/contributions/:id", (request, response) => {
-    const { id } = request.params;
+router.get("/contributions/:discussionId", (request, response) => {
+    const { discussionId } = request.params;
     pool.query(
-      `SELECT * FROM contributions WHERE discussion_id = ${id} order by points Desc;`,
+      `SELECT * FROM contributions WHERE discussion_id = ${discussionId} order by points Desc;`,
       (error, results) => {
         if (error) {
           throw error;
