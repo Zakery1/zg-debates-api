@@ -5,8 +5,6 @@ const { pool } = require("../helpers/pool.helper");
 router.get("/contributions/", (request, response) => {
   const { discussionId, contributionId } = request.query;
 
-  console.log("router.get(/ contributions /, (request, re", request.query);
-
   let query = "SELECT * FROM contributions";
 
   if (discussionId) {
@@ -65,23 +63,7 @@ router.put("/contributions", (request, response) => {
   );
 });
 
-// router.put("/contributions", (request, response) => {
-//   let { contributionId } = request.body;
-
-//   pool.query(
-//     `UPDATE contributions SET points = points + 1 WHERE id = $1;`,
-//     [contributionId],
-//     (error, results) => {
-//       if (error) {
-//         throw error;
-//       }
-//       response.status(200).json("New vote counted");
-//     }
-//   );
-// });
-
 router.post("/contributions", (request, response) => {
-  console.log("post new contribution stuff", request.body);
   let {
     userId,
     discussionId,

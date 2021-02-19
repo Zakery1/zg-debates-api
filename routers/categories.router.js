@@ -3,7 +3,6 @@ const { pool } = require("../helpers/pool.helper");
 
 router.get("/categories", (request, response) => {
   pool.query("SELECT * FROM categories", (error, results) => {
-    console.log("hi");
     if (error) {
       throw error;
     }

@@ -19,8 +19,6 @@ router.get("/users/:username", (request, response) => {
         return user.username;
       });
       response.status(200).json(usernames);
-
-      // response.status(200).json({ message: "Username already exists" });
     }
   );
 });

@@ -2,7 +2,6 @@ const router = require('express').Router();
 const { pool } = require('../helpers/pool.helper');
 
 router.get("/votes/", (request, response) => {
-  console.log("New check for hitting votes", request.query);
   let { userId } = request.query;
 
   pool.query(
