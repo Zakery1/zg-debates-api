@@ -1,6 +1,24 @@
 const router = require('express').Router();
 const { pool } = require('../helpers/pool.helper');
 
+router.get("/votes/", (request, response) => {
+  console.log("New check for hitting votes", request.query);
+  let { userId } = request.query;
+
+  pool.query(
+    `select contribution_id from votes where user_id = ${userId};`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      const votes = results.rows.map((vote) => {
+        return { userId: vote.user_id, contributionId: vote.contribution_id };
+      });
+      response.status(200).json(votes);
+    }
+  );
+});
+
 router.delete("/votes", (request, response) => {
   let { userId, contributionId } = request.body;
 
