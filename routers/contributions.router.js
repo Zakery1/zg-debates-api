@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { pool } = require("../helpers/pool.helper");
 
 //gets all contributions for current discussion
-router.get("/contributions/", (request, response) => {
+router.get("/", (request, response) => {
   const { discussionId, contributionId } = request.query;
 
   let query = "SELECT * FROM contributions";
@@ -38,7 +38,7 @@ router.get("/contributions/", (request, response) => {
 
 ////voting
 
-router.put("/contributions", (request, response) => {
+router.put("/", (request, response) => {
   let { contributionId, voteFor } = request.body;
 
   let query = "UPDATE contributions SET points = ";
@@ -63,7 +63,7 @@ router.put("/contributions", (request, response) => {
   );
 });
 
-router.post("/contributions", (request, response) => {
+router.post("/", (request, response) => {
   let {
     userId,
     discussionId,
@@ -87,7 +87,7 @@ router.post("/contributions", (request, response) => {
   );
 });
 
-router.delete("/contributions/:id", (request, response) => {
+router.delete("/:id", (request, response) => {
   const id = request.params.id;
 
   pool.query(
@@ -102,7 +102,7 @@ router.delete("/contributions/:id", (request, response) => {
   );
 });
 
-router.put("/contributions/:id", (request, response) => {
+router.put("/:id", (request, response) => {
   const id = request.params.id;
 
   const { updatedContribution } = request.body;
