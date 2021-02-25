@@ -1,82 +1,69 @@
+const router = require("express").Router();
+const { pool } = require("../helpers/pool.helper");
 
-const router = require('express').Router();
-const { pool } = require('../helpers/pool.helper');
+//gets all contributions for current discussion
+router.get("/", (request, response) => {
+  const { discussionId, contributionId } = request.query;
 
-router.get("/contributions/:id", (request, response) => {
-    const { id } = request.params;
-    pool.query(
-      `SELECT * FROM contributions WHERE discussion_id = ${id} order by points Desc;`,
-      (error, results) => {
-        if (error) {
-          throw error;
-        }
-        const contributions = results.rows.map((contribution) => {
-          return {
-            id: contribution.id,
-            userId: contribution.user_id,
-            discussionId: contribution.discussion_id,
-            contribution: contribution.contribution,
-            agree: contribution.agree,
-            neutral: contribution.neutral,
-            disagree: contribution.disagree,
-            points: contribution.points,
-          };
-        });
-        response.status(200).json(contributions);
-      }
-    );
-});
-  
-router.get("/contributions/:userId", (request, response) => {
-    let { userId } = request.params;
-  
-    pool.query(
-      `select contribution_id from votes where user_id = ${userId};`,
-      (error, results) => {
-        if (error) {
-          throw error;
-        }
-        const votes = results.rows.map((vote) => {
-          return { userId: vote.user_id, contributionId: vote.contribution_id };
-        });
-        response.status(200).json(votes);
-      }
-    );
-});
-  
-  ////voting
-  
-router.put("/contributions", (request, response) => {
-    let { contributionId } = request.body;
-  
-    pool.query(
-      `UPDATE contributions SET points = points - 1 WHERE id = $1;`,
-      [contributionId],
-      (error, results) => {
-        if (error) {
-          throw error;
-        }
-        response.status(200).json("Vote Removed");
-      }
-    );
-});
-  
-router.put("/contributions", (request, response) => {
-    let { contributionId } = request.body;
-  
-    pool.query(
-      `UPDATE contributions SET points = points + 1 WHERE id = $1;`,
-      [contributionId],
-      (error, results) => {
-        if (error) {
-          throw error;
-        }
-        response.status(200).json("New vote counted");
-      }
-    );
+  let query = "SELECT * FROM contributions";
+
+  if (discussionId) {
+    query =
+      query + ` WHERE discussion_id = ${discussionId} order by points Desc;`;
+  }
+
+  if (contributionId) {
+    query = query + ` WHERE id = ${contributionId}`;
+  }
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    const contributions = results.rows.map((contribution) => {
+      return {
+        id: contribution.id,
+        userId: contribution.user_id,
+        discussionId: contribution.discussion_id,
+        contribution: contribution.contribution,
+        agree: contribution.agree,
+        neutral: contribution.neutral,
+        disagree: contribution.disagree,
+        points: contribution.points,
+      };
+    });
+    response.status(200).json(contributions);
+  });
 });
 
-router.post("/contributions", (request, response) => {
+////voting
+
+router.put("/", (request, response) => {
+  let { contributionId, voteFor } = request.body;
+
+  let query = "UPDATE contributions SET points = ";
+
+  if (voteFor) {
+    query = query + "points + 1 WHERE id = $1;";
+  }
+
+  if (!voteFor) {
+    query = query + "points - 1 WHERE id = $1;";
+  }
+
+  pool.query(
+    query,
+    [contributionId],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json("Vote Removed");
+    }
+  );
+});
+
+router.post("/", (request, response) => {
   let {
     userId,
     discussionId,
@@ -100,7 +87,7 @@ router.post("/contributions", (request, response) => {
   );
 });
 
-router.delete("/contributions/:id", (request, response) => {
+router.delete("/:id", (request, response) => {
   const id = request.params.id;
 
   pool.query(
@@ -115,7 +102,7 @@ router.delete("/contributions/:id", (request, response) => {
   );
 });
 
-router.put("/contributions/:id", (request, response) => {
+router.put("/:id", (request, response) => {
   const id = request.params.id;
 
   const { updatedContribution } = request.body;
@@ -127,24 +114,6 @@ router.put("/contributions/:id", (request, response) => {
       if (error) {
       }
       response.status(200).json("Contribution Edited");
-    }
-  );
-});
-
-router.get("/contributions/:id", (request, response) => {
-  const id = request.params.id;
-
-  pool.query(
-    "SELECT * FROM contributions WHERE id = $1",
-    [id],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      const contribution = results.rows.map((contribution) => {
-        return contribution.contribution;
-      });
-      response.status(200).json(contribution[0]);
     }
   );
 });

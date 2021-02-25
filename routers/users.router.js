@@ -1,7 +1,6 @@
-
 const bcrypt = require("bcrypt");
-const router = require('express').Router();
-const { pool } = require('../helpers/pool.helper');
+const router = require("express").Router();
+const { pool } = require("../helpers/pool.helper");
 
 const numOfSaltRounds = 12;
 
@@ -19,14 +18,13 @@ router.get("/users/:username", (request, response) => {
         return user.username;
       });
       response.status(200).json(usernames);
-
-      // response.status(200).json({ message: "Username already exists" });
     }
   );
 });
 
+//register
 router.post("/users", (request, response) => {
-  const { username, password } = request.body;
+  const { username, password } = request.body.data;
 
   bcrypt.hash(password, numOfSaltRounds).then((hashedPassword) => {
     pool.query(
@@ -44,6 +42,7 @@ router.post("/users", (request, response) => {
 
 router.post("/sessions", (request, response) => {
   const { username, password } = request.body;
+  console.log("username and pw", username);
   pool.query(
     "select * from users where username = $1",
     [username],

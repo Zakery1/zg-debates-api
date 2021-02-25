@@ -1,6 +1,5 @@
-
-const router = require('express').Router();
-const { pool } = require('../helpers/pool.helper');
+const router = require("express").Router();
+const { pool } = require("../helpers/pool.helper");
 
 router.get("/categories", (request, response) => {
   pool.query("SELECT * FROM categories", (error, results) => {

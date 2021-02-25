@@ -1,7 +1,24 @@
 const router = require('express').Router();
 const { pool } = require('../helpers/pool.helper');
 
-router.delete("/votes", (request, response) => {
+router.get("/", (request, response) => {
+  let { userId } = request.query;
+
+  pool.query(
+    `select contribution_id from votes where user_id = ${userId};`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      const votes = results.rows.map((vote) => {
+        return { userId: vote.user_id, contributionId: vote.contribution_id };
+      });
+      response.status(200).json(votes);
+    }
+  );
+});
+
+router.delete("/", (request, response) => {
   let { userId, contributionId } = request.body;
 
   pool.query(
@@ -17,7 +34,7 @@ router.delete("/votes", (request, response) => {
   );
 });
 
-router.post("/votes", (request, response) => {
+router.post("/", (request, response) => {
   let { userId, contributionId } = request.body;
 
   pool.query(
@@ -33,7 +50,7 @@ router.post("/votes", (request, response) => {
   );
 });
 
-router.delete("/votes/:id", (request, response) => {
+router.delete("/:id", (request, response) => {
   let contributionId = request.params.id;
 
   pool.query(
