@@ -40,6 +40,7 @@ router.post("/users", (request, response) => {
   });
 });
 
+//login
 router.post("/sessions", (request, response) => {
   const { username, password } = request.body;
   console.log("username and pw", username);

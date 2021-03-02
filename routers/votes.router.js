@@ -1,7 +1,8 @@
-const router = require('express').Router();
-const { pool } = require('../helpers/pool.helper');
+const router = require("express").Router();
+const { pool } = require("../helpers/pool.helper");
 
 router.get("/", (request, response) => {
+  console.log("request.query", request.query);
   let { userId } = request.query;
 
   pool.query(
