@@ -5,7 +5,6 @@ const { pool } = require("../helpers/pool.helper");
 const numOfSaltRounds = 12;
 
 router.get("/", (request, response) => {
-  console.log("user request", request.query);
   const { username, userId } = request.query;
 
   let query = "SELECT * FROM users ";
