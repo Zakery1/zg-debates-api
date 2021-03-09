@@ -31,12 +31,12 @@ router.get("/", (request, response) => {
 
 //register
 router.post("/", (request, response) => {
-  const { username, password } = request.body.data;
+  const { username, password, registerDate } = request.body.data;
 
   bcrypt.hash(password, numOfSaltRounds).then((hashedPassword) => {
     pool.query(
-      "INSERT into users (username, password) VALUES ($1, $2);",
-      [username, hashedPassword],
+      "INSERT into users (username, password, register_date) VALUES ($1, $2, $3);",
+      [username, hashedPassword, registerDate],
       (error, results) => {
         if (error) {
           throw error;
@@ -50,7 +50,6 @@ router.post("/", (request, response) => {
 //login
 router.post("/sessions", (request, response) => {
   const { username, password } = request.body;
-  console.log("username and pw", username);
   pool.query(
     "select * from users where username = $1",
     [username],

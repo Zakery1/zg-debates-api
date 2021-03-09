@@ -72,11 +72,12 @@ router.post("/", (request, response) => {
     neutral,
     disagree,
     points,
+    contributeDate
   } = request.body.data;
 
   pool.query(
-    "INSERT INTO contributions (user_id, discussion_id, contribution, agree, neutral, disagree, points) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-    [userId, discussionId, contribution, agree, neutral, disagree, points],
+    "INSERT INTO contributions (user_id, discussion_id, contribution, agree, neutral, disagree, points, contribute_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+    [userId, discussionId, contribution, agree, neutral, disagree, points, contributeDate],
     (error, results) => {
       if (error) {
         throw error;
