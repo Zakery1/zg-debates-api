@@ -9,7 +9,7 @@ const votesRouter = require("./routers/votes.router");
 router.use(categoriesRouter);
 router.use(discussionsRouter);
 router.use("/contributions", contributionsRouter);
-router.use(usersRouter);
+router.use("/users", usersRouter);
 router.use("/votes", votesRouter);
 
 module.exports = router;

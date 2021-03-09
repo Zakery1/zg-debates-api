@@ -4,26 +4,33 @@ const { pool } = require("../helpers/pool.helper");
 
 const numOfSaltRounds = 12;
 
-router.get("/users/:username", (request, response) => {
-  const username = request.params.username;
-  pool.query(
-    `SELECT * FROM users where username = $1`,
-    [username],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
+router.get("/", (request, response) => {
+  const { username, userId } = request.query;
 
-      const usernames = results.rows.map((user) => {
-        return user.username;
-      });
-      response.status(200).json(usernames);
+  let query = "SELECT * FROM users ";
+
+  if (username) {
+    query = query + `where username = '${username}'`;
+  }
+
+  if (userId) {
+    query = query + `where id = ${userId}`;
+  }
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      throw error;
     }
-  );
+
+    const usernames = results.rows.map((user) => {
+      return user.username;
+    });
+    response.status(200).json(usernames);
+  });
 });
 
 //register
-router.post("/users", (request, response) => {
+router.post("/", (request, response) => {
   const { username, password } = request.body.data;
 
   bcrypt.hash(password, numOfSaltRounds).then((hashedPassword) => {
@@ -40,6 +47,7 @@ router.post("/users", (request, response) => {
   });
 });
 
+//login
 router.post("/sessions", (request, response) => {
   const { username, password } = request.body;
   console.log("username and pw", username);
