@@ -25,7 +25,7 @@ app.use(
   })
 );
 
-app.use('/api', cors(), apiRouter);
+app.use('/api', apiRouter);
 
 app.get("/", (request, response) => {
   // response.setHeader("Access-Control-Allow-Origin", "*");
