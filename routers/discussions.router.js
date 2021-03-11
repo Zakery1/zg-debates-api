@@ -28,11 +28,11 @@ discussionsRouter.get("/discussions", (request, response) => {
 });
 
 discussionsRouter.post("/discussions", (request, response) => {
-  let { creatorId, categoryId, discussionName } = request.body.data;
+  let { creatorId, categoryId, discussionName, date } = request.body.data;
 
   pool.query(
-    "INSERT INTO discussions (creator_id, category_id, discussion_name) VALUES ($1, $2, $3)",
-    [creatorId, categoryId, discussionName],
+    "INSERT INTO discussions (creator_id, category_id, discussion_name, creation_date) VALUES ($1, $2, $3, $4)",
+    [creatorId, categoryId, discussionName, date],
     (error, results) => {
       if (error) {
         throw error;
