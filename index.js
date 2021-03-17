@@ -28,7 +28,6 @@ app.use(
 app.use('/api', apiRouter);
 
 app.get("/", (request, response) => {
-  // response.setHeader("Access-Control-Allow-Origin", "*");
   response.send("welcome to new twitter ");
 });
 
