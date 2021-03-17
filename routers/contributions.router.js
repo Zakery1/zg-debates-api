@@ -4,6 +4,8 @@ const { pool } = require("../helpers/pool.helper");
 //gets all contributions for current discussion
 router.get("/", (request, response) => {
   const { discussionId, contributionId } = request.query;
+  console.log("discussionId", discussionId);
+  console.log("contributionId", contributionId);
 
   let query = "SELECT * FROM contributions";
 
@@ -51,16 +53,12 @@ router.put("/", (request, response) => {
     query = query + "points - 1 WHERE id = $1;";
   }
 
-  pool.query(
-    query,
-    [contributionId],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).json("Vote Removed");
+  pool.query(query, [contributionId], (error, results) => {
+    if (error) {
+      throw error;
     }
-  );
+    response.status(200).json("Vote Removed");
+  });
 });
 
 router.post("/", (request, response) => {
@@ -72,12 +70,21 @@ router.post("/", (request, response) => {
     neutral,
     disagree,
     points,
-    contributeDate
+    contributeDate,
   } = request.body.data;
 
   pool.query(
     "INSERT INTO contributions (user_id, discussion_id, contribution, agree, neutral, disagree, points, contribute_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
-    [userId, discussionId, contribution, agree, neutral, disagree, points, contributeDate],
+    [
+      userId,
+      discussionId,
+      contribution,
+      agree,
+      neutral,
+      disagree,
+      points,
+      contributeDate,
+    ],
     (error, results) => {
       if (error) {
         throw error;
