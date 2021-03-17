@@ -57,6 +57,11 @@ router.post("/sessions", (request, response) => {
       if (error) {
         throw error;
       }
+
+      if(results.rows.length === 0) {
+        response.status(403).json({ message: "Wrong username or password" });
+      }
+      
       results.rows.map((user) => {
         if (user) {
           bcrypt.compare(password, user.password, function (err, res) {
