@@ -67,7 +67,7 @@ router.post("/sessions", (request, response) => {
           bcrypt.compare(password, user.password, function (err, res) {
             response.setHeader(
               "Access-Control-Allow-Origin",
-              "https://zg-debates-prod.netlify.app"
+              "https://zg-debates.netlify.app"
             );
             if (err) {
               throw err;
