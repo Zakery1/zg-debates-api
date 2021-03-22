@@ -76,6 +76,7 @@ router.post("/sessions", (request, response) => {
               request.session.user = {
                 username: user.username,
                 userId: user.id,
+                role: user.role
               };
               response.json(request.session.user);
             } else {
