@@ -36,11 +36,13 @@ router.delete("/", (request, response) => {
 });
 
 router.post("/", (request, response) => {
-  let { userId, contributionId } = request.body;
+  let { userId, contributionId, voteType } = request.body;
+
+  let voteDate = "Now()";
 
   pool.query(
-    "INSERT into votes (user_id, contribution_id) values ($1, $2);",
-    [userId, contributionId],
+    "INSERT into votes (user_id, contribution_id, vote_date, vote_type) values ($1, $2, $3, $4);",
+    [userId, contributionId, voteDate, voteType],
     (error, results) => {
       if (error) {
         throw error;
