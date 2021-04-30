@@ -6,13 +6,14 @@ router.get("/", (request, response) => {
   let { userId } = request.query;
 
   pool.query(
-    `select contribution_id from votes where user_id = ${userId};`,
+    `select contribution_id, vote_date, vote_type from votes where user_id = ${userId};`,
     (error, results) => {
       if (error) {
         throw error;
       }
       const votes = results.rows.map((vote) => {
-        return { userId: vote.user_id, contributionId: vote.contribution_id };
+        console.log("vote here:", vote)
+        return { userId: vote.user_id, contributionId: vote.contribution_id, voteDate: vote.vote_date, voteType: vote.vote_type };
       });
       response.status(200).json(votes);
     }

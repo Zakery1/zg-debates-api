@@ -32,6 +32,9 @@ router.get("/", (request, response) => {
         neutral: contribution.neutral,
         disagree: contribution.disagree,
         points: contribution.points,
+        contributionDate: contribution.contribute_date,
+        hyperboles: contribution.hyperboles,
+        trolls: contribution.trolls
       };
     });
     response.status(200).json(contributions);
