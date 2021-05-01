@@ -2,7 +2,6 @@ const router = require("express").Router();
 const { pool } = require("../helpers/pool.helper");
 
 router.get("/", (request, response) => {
-  console.log("request.query", request.query);
   let { userId } = request.query;
 
   pool.query(
@@ -12,7 +11,6 @@ router.get("/", (request, response) => {
         throw error;
       }
       const votes = results.rows.map((vote) => {
-        console.log("vote here:", vote)
         return { userId: vote.user_id, contributionId: vote.contribution_id, voteDate: vote.vote_date, voteType: vote.vote_type };
       });
       response.status(200).json(votes);

@@ -4,8 +4,7 @@ const { pool } = require("../helpers/pool.helper");
 //gets all contributions for current discussion
 router.get("/", (request, response) => {
   const { discussionId, contributionId } = request.query;
-  console.log("discussionId", discussionId);
-  console.log("contributionId", contributionId);
+
 
   let query = "SELECT * FROM contributions";
 
@@ -44,17 +43,37 @@ router.get("/", (request, response) => {
 ////voting
 
 router.put("/", (request, response) => {
-  let { contributionId, voteFor } = request.body;
+  console.log("Got Here")
+  let { contributionId, voteFor, voteType } = request.body;
 
-  let query = "UPDATE contributions SET points = ";
+  let typeColumn;
+
+  if(voteType === 1) {
+    typeColumn = "points";
+  } else if (voteType === 2) {
+    typeColumn = "hyperboles";
+  } else if (voteType === 3) {
+    typeColumn = "trolls";
+  } else {
+    return;
+  }
+
+  console.log("Got Here 2")
+
+  console.log(typeColumn, "typeColumn")
+
+  let query = `UPDATE contributions SET ${typeColumn} = `;
 
   if (voteFor) {
-    query = query + "points + 1 WHERE id = $1;";
+    query = query + `${typeColumn} + 1 WHERE id = $1;`;
   }
 
   if (!voteFor) {
-    query = query + "points - 1 WHERE id = $1;";
+    query = query + `${typeColumn} - 1 WHERE id = $1;`;
   }
+
+    console.log("THE QUERY FOR REMOVING POINTS", query)
+
 
   pool.query(query, [contributionId], (error, results) => {
     if (error) {
@@ -112,6 +131,7 @@ router.delete("/:id", (request, response) => {
     }
   );
 });
+
 
 router.put("/:id", (request, response) => {
   const id = request.params.id;
