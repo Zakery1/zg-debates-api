@@ -43,7 +43,6 @@ router.get("/", (request, response) => {
 ////voting
 
 router.put("/", (request, response) => {
-  console.log("Got Here")
   let { contributionId, voteFor, voteType } = request.body;
 
   let typeColumn;
@@ -58,9 +57,7 @@ router.put("/", (request, response) => {
     return;
   }
 
-  console.log("Got Here 2")
 
-  console.log(typeColumn, "typeColumn")
 
   let query = `UPDATE contributions SET ${typeColumn} = `;
 
@@ -72,7 +69,7 @@ router.put("/", (request, response) => {
     query = query + `${typeColumn} - 1 WHERE id = $1;`;
   }
 
-    console.log("THE QUERY FOR REMOVING POINTS", query)
+  console.log("THE QUERY FOR REMOVING", query)
 
 
   pool.query(query, [contributionId], (error, results) => {
@@ -92,11 +89,13 @@ router.post("/", (request, response) => {
     neutral,
     disagree,
     points,
+    hyperboles,
+    trolls,
     contributeDate,
   } = request.body.data;
 
   pool.query(
-    "INSERT INTO contributions (user_id, discussion_id, contribution, agree, neutral, disagree, points, contribute_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+    "INSERT INTO contributions (user_id, discussion_id, contribution, agree, neutral, disagree, points, hyperboles, trolls, contribute_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
     [
       userId,
       discussionId,
@@ -105,6 +104,8 @@ router.post("/", (request, response) => {
       neutral,
       disagree,
       points,
+      hyperboles,
+      trolls,
       contributeDate,
     ],
     (error, results) => {
