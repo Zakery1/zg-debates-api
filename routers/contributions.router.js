@@ -5,7 +5,6 @@ const { pool } = require("../helpers/pool.helper");
 router.get("/", (request, response) => {
   const { discussionId, contributionId } = request.query;
 
-
   let query = "SELECT * FROM contributions";
 
   if (discussionId) {
@@ -33,7 +32,7 @@ router.get("/", (request, response) => {
         points: contribution.points,
         contributionDate: contribution.contribute_date,
         hyperboles: contribution.hyperboles,
-        trolls: contribution.trolls
+        trolls: contribution.trolls,
       };
     });
     response.status(200).json(contributions);
@@ -47,7 +46,7 @@ router.put("/", (request, response) => {
 
   let typeColumn;
 
-  if(voteType === 1) {
+  if (voteType === 1) {
     typeColumn = "points";
   } else if (voteType === 2) {
     typeColumn = "hyperboles";
@@ -56,8 +55,6 @@ router.put("/", (request, response) => {
   } else {
     return;
   }
-
-
 
   let query = `UPDATE contributions SET ${typeColumn} = `;
 
@@ -68,9 +65,6 @@ router.put("/", (request, response) => {
   if (!voteFor) {
     query = query + `${typeColumn} - 1 WHERE id = $1;`;
   }
-
-  console.log("THE QUERY FOR REMOVING", query)
-
 
   pool.query(query, [contributionId], (error, results) => {
     if (error) {
@@ -132,7 +126,6 @@ router.delete("/:id", (request, response) => {
     }
   );
 });
-
 
 router.put("/:id", (request, response) => {
   const id = request.params.id;

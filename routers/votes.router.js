@@ -11,7 +11,12 @@ router.get("/", (request, response) => {
         throw error;
       }
       const votes = results.rows.map((vote) => {
-        return { userId: vote.user_id, contributionId: vote.contribution_id, voteDate: vote.vote_date, voteType: vote.vote_type };
+        return {
+          userId: vote.user_id,
+          contributionId: vote.contribution_id,
+          voteDate: vote.vote_date,
+          voteType: vote.vote_type,
+        };
       });
       response.status(200).json(votes);
     }
