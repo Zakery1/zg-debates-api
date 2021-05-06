@@ -19,11 +19,11 @@ router.get("/", (request, response) => {
 });
 
 router.delete("/", (request, response) => {
-  let { userId, contributionId } = request.body;
+  let { userId, contributionId, voteType } = request.body;
 
   pool.query(
-    "DELETE from votes where user_id = $1 AND contribution_id = $2",
-    [userId, contributionId],
+    "DELETE from votes where user_id = $1 AND contribution_id = $2 AND vote_type = $3",
+    [userId, contributionId, voteType],
     (error, results) => {
       if (error) {
         throw error;
