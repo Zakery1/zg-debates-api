@@ -1,1 +1,1 @@
-Visit the client website at [zg-debates.netlify.app](https://zg-debates.netlify.app/).
+Visit the client website at [zg-debates.netlify.app](https://hyperbolia.com/).
