@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(cors());
+app.options('*', cors());
 
 app.use(
   session({

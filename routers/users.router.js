@@ -65,10 +65,6 @@ router.post("/sessions", (request, response) => {
       results.rows.map((user) => {
         if (user) {
           bcrypt.compare(password, user.password, function (err, res) {
-            response.setHeader(
-              "Access-Control-Allow-Origin",
-              "https://hyperbolia.com/"
-            );
             if (err) {
               throw err;
             }
